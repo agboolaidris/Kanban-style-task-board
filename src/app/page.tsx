@@ -1,101 +1,209 @@
-import Image from "next/image";
+"use client";
+import { useCallback, useMemo, useState, useRef, useEffect } from "react";
+import { useSetAtom } from "jotai";
+import dynamic from "next/dynamic";
+import { Plus } from "lucide-react";
 
-export default function Home() {
+// DND Kit imports
+import {
+  DndContext,
+  DragEndEvent,
+  DragOverEvent,
+  DragStartEvent,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+
+// Components
+import { Navbar } from "@ui/Navbar";
+import { Button } from "@ui/Button";
+import { ColumnCard } from "src/components/modules/column/ColumnCard";
+import { DndPortal } from "@ui/DndPortal";
+import { ColumnModal } from "src/components/modules/column/ColumnModal";
+
+// Hooks & State Management
+import { useColumns } from "src/hooks/useColumns";
+import { useTasks } from "src/hooks/useTasks";
+import { columnModalAtom } from "src/lib/store";
+import { Column } from "src/types/column";
+import { Task } from "src/types/task";
+
+// Dynamically load DND wrapper to disable SSR
+const DndWrapper = dynamic(
+  () =>
+    Promise.resolve(({ children }: { children: React.ReactNode }) => (
+      <>{children}</>
+    )),
+  { ssr: false }
+);
+
+export default function KanbanBoard() {
+  // State Management
+  const [activeColumn, setActiveColumn] = useState<Column | null>(null);
+  const [activeTask, setActiveTask] = useState<Task | null>(null);
+  const setOpenAddColumn = useSetAtom(columnModalAtom);
+
+  // Data Hooks
+  const { columns, moveColumn } = useColumns();
+  const { moveTask, updateTask } = useTasks();
+
+  // Memoized Values
+  const columnsId = useMemo(() => columns.map(({ id }) => id), [columns]);
+
+  // Drag Throttling Refs
+  const lastPosition = useRef<{ activeId: string; overId: string } | null>(
+    null
+  );
+  const throttleTimeout = useRef<NodeJS.Timeout | null>(null);
+
+  // Cleanup throttle timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (throttleTimeout.current) {
+        clearTimeout(throttleTimeout.current);
+      }
+    };
+  }, []);
+
+  // Sensor Configuration
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: { distance: 3 },
+    })
+  );
+
+  /**
+   * Handles drag start event for both columns and tasks
+   */
+  const handleDragStart = useCallback((event: DragStartEvent) => {
+    const { active } = event;
+    const data = active.data.current;
+
+    if (data?.type === "Column") setActiveColumn(data.column);
+    if (data?.type === "Task") setActiveTask(data.task);
+  }, []);
+
+  /**
+   * Handles drag over events with throttling and position validation
+   */
+  const handleDragOver = useCallback(
+    (event: DragOverEvent) => {
+      const { active, over } = event;
+      if (!over) return;
+
+      const activeId = active.id.toString();
+      const overId = over.id.toString();
+
+      // Prevent duplicate updates
+      if (
+        lastPosition.current?.activeId === activeId &&
+        lastPosition.current?.overId === overId
+      ) {
+        return;
+      }
+
+      // Throttle updates to 50ms
+      if (!throttleTimeout.current) {
+        throttleTimeout.current = setTimeout(() => {
+          throttleTimeout.current = null;
+        }, 50);
+
+        lastPosition.current = { activeId, overId };
+
+        // Skip same element interactions
+        if (activeId === overId) return;
+
+        // Handle task movements
+        const isActiveTask = active.data.current?.type === "Task";
+        const isOverTask = over.data.current?.type === "Task";
+
+        if (isActiveTask) {
+          if (isOverTask) {
+            moveTask(activeId, overId, {
+              columnId: over.data.current?.task?.columnId,
+            });
+          } else {
+            updateTask(activeId, { columnId: overId });
+          }
+        }
+      }
+    },
+    [moveTask, updateTask]
+  );
+
+  /**
+   * Handles drag end events with position validation
+   */
+  const handleDragEnd = useCallback(
+    (event: DragEndEvent) => {
+      const { active, over } = event;
+      setActiveColumn(null);
+      setActiveTask(null);
+
+      if (!over) return;
+
+      // Handle column movements
+      if (active.data.current?.type === "Column") {
+        const originalIndex = columns.findIndex((c) => c.id === active.id);
+        const newIndex = columns.findIndex((c) => c.id === over.id);
+
+        if (originalIndex !== newIndex) {
+          moveColumn(active.id.toString(), over.id.toString());
+        }
+      }
+    },
+    [columns, moveColumn]
+  );
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div className="h-screen flex flex-col">
+      <Navbar />
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+      <DndWrapper>
+        <DndContext
+          onDragEnd={handleDragEnd}
+          sensors={sensors}
+          onDragStart={handleDragStart}
+          onDragOver={handleDragOver}
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+          {/* Columns Container */}
+          <div className="flex gap-2 overflow-x-scroll h-full py-2 wrapper pb-3">
+            <SortableContext
+              items={columnsId}
+              strategy={verticalListSortingStrategy}
+            >
+              {columns.map((column) => (
+                <ColumnCard
+                  key={column.id}
+                  column={column}
+                  className="w-72 shrink-0 h-full"
+                />
+              ))}
+            </SortableContext>
+
+            {/* Add Column Button */}
+            <Button
+              variant="secondary"
+              className="!bg-gray-100"
+              onClick={() => setOpenAddColumn({ isOpen: true, type: "add" })}
+              aria-label="Add new column"
+            >
+              <Plus />
+            </Button>
+          </div>
+
+          {/* Drag Preview Portal */}
+          <DndPortal activeColumn={activeColumn} activeTask={activeTask} />
+        </DndContext>
+      </DndWrapper>
+
+      {/* Column Management Modal */}
+      <ColumnModal />
     </div>
   );
 }
