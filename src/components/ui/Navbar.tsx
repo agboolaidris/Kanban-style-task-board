@@ -56,8 +56,8 @@ export const Navbar = () => {
         </div>
       </div>
       <div className="h-px bg-gray-100" />
-      <div className="py-2 wrapper flex gap-5 items-center">
-        <div className="flex items-center gap-2">
+      <div className="py-2 wrapper flex gap-5 items-center flex-wrap">
+        <div className="flex items-center gap-2 shrink-0">
           <BodyText className="font-semibold flex items-center">
             columns:{"   "}
             {"  "}
@@ -70,7 +70,7 @@ export const Navbar = () => {
             <span className="text-indigo-800">{tasks.length} </span>
           </BodyText>
         </div>
-        <div className="flex gap-4 justify-end ml-auto">
+        <div className="flex gap-4 justify-end ml-auto shrink-0">
           <Button onClick={() => setColumnModal({ isOpen: true, type: "add" })}>
             <Plus className="w-5 h-5" />
             Column
