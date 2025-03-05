@@ -50,6 +50,9 @@ Kanban-style-task-board/
 │   │   │   │   ├── ColumnCard.tsx
 │   │   │   │   ├── ColumnForm.tsx
 │   │   │   │   ├── ColumnModal.tsx
+│   │   │   │   ├── __test__/
+│   │   │   │   │   ├── EditTask.test.tsx
+│   │   │   │   │   ├── AddTaskForm.test.tsx
 │   │   │   ├── task/
 │   │   │   │   ├── AddTaskForm.tsx
 │   │   │   │   ├── TaskCard.tsx
@@ -63,6 +66,9 @@ Kanban-style-task-board/
 │   │   │   ├── __tests__/
 │   │   │   │   ├── Button.test.tsx
 │   │   │   │   ├── ColorPicker.test.tsx
+│   │   │   │   ├── Modal.test.tsx
+│   │   │   │   ├── Input.test.tsx
+│   │   │   │   ├── TextArea.test.tsx
 │   ├── data/
 │   │   ├── columns.json
 │   │   ├── tasks.json
@@ -70,9 +76,14 @@ Kanban-style-task-board/
 │   │   ├── useColumns.ts
 │   │   ├── useOutsideClick.ts
 │   │   ├── useTasks.ts
+│   │   ├── __test__/
+│   │   │   ├── useColumns.test.tsx
 │   ├── lib/
 │   │   ├── date.ts
 │   │   ├── store.ts
+│   │   ├── __test__/
+│   │   │   ├── generateId.test.ts
+│   │   │   ├── date.test.ts
 │   ├── types/
 │   │   ├── column.ts
 │   │   ├── task.ts
