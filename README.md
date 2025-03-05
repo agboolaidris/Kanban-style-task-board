@@ -19,6 +19,7 @@ This project is a Kanban-style task board built with Next.js, Tailwind CSS, and 
 - **State Management**: Manage state using Jotai.
 - **Responsive Design**: Built with Tailwind CSS for responsive design.
 - **TypeScript**: Type-safe code with TypeScript.
+- **Testing**: Unit and integration tests using Jest and React Testing Library.
 
 ## Technologies Used
 
@@ -31,11 +32,13 @@ This project is a Kanban-style task board built with Next.js, Tailwind CSS, and 
 - **Dnd Kit**: A set of utilities for building complex drag-and-drop interfaces.
 - **Lucide Icons**: A collection of simple and customizable icons.
 - **Day.js**: A lightweight JavaScript date library for parsing, validating, manipulating, and formatting dates.
+- **Jest**: A delightful JavaScript testing framework with a focus on simplicity.
+- **React Testing Library**: A library for testing React components.
 
 ## Project Structure
 
 ```plaintext
-next-tailwind-boilerplate/
+Kanban-style-task-board/
 ├── public/
 │   └── ...
 ├── src/
@@ -57,6 +60,9 @@ next-tailwind-boilerplate/
 │   │   │   ├── Modal.tsx
 │   │   │   ├── Text.tsx
 │   │   │   ├── TextArea.tsx
+│   │   │   ├── __tests__/
+│   │   │   │   ├── Button.test.tsx
+│   │   │   │   ├── ColorPicker.test.tsx
 │   ├── data/
 │   │   ├── columns.json
 │   │   ├── tasks.json
@@ -121,6 +127,17 @@ yarn dev
 ```
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+### Running Tests
+
+Run the tests:
+```sh
+npm test
+```
+or
+```sh
+yarn test
+```
+
 ## Scripts
 
 - `dev`: Runs the development server.
@@ -128,6 +145,8 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - `start`: Starts the production server.
 - `lint`: Runs ESLint to check for linting errors.
 - `format`: Formats the code using Prettier.
+- `test`: Runs the test suite.
+- `test:watch`: Runs the test suite in watch mode.
 
 ## License
 
