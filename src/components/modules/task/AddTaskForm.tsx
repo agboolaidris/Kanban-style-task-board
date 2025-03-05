@@ -6,6 +6,17 @@ import { Plus } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useOutsideClick } from "src/hooks/useOutsideClick";
 
+/**
+ * AddTaskForm component allows users to add a new task.
+ * It provides a form with a text area for entering the task title and buttons to save or cancel the task.
+ * The form is initially hidden and can be toggled open by clicking the "Add Task" button.
+ *
+ * @param {Object} props - The component props.
+ * @param {Function} props.onSubmit - The function to call when the form is submitted with a valid task title.
+ *
+ * @returns {JSX.Element} The rendered AddTaskForm component.
+ */
+
 type Props = {
   onSubmit: (value: string) => void;
 };
@@ -15,8 +26,10 @@ export const AddTaskForm = ({ onSubmit }: Props) => {
   const [title, setTitle] = useState("");
 
   const handleSubmit = () => {
-    if (!title.trim()) return;
-    onSubmit(title);
+    if (title.trim()) {
+      onSubmit(title);
+    }
+
     setTitle("");
     setIsOpen(false);
   };
@@ -72,7 +85,7 @@ export const AddTaskForm = ({ onSubmit }: Props) => {
         <Button
           onClick={() => setIsOpen(true)}
           variant="secondary"
-          className="!bg-gray-200 !w-full hover:bg-gray-300"
+          className="!bg-gray-300 !w-full hover:!bg-gray-400"
         >
           <Plus /> Add Task
         </Button>

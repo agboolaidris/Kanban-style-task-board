@@ -14,6 +14,33 @@ import { useColumns } from "src/hooks/useColumns";
 import { useSetAtom } from "jotai";
 import { columnModalAtom } from "src/lib/store";
 
+/**
+ * ColumnCard component represents a column in a task management board.
+ * It displays the column header, a list of tasks, and a form to add new tasks.
+ *
+ * @param {Props} props - The properties object.
+ * @param {Column} props.column - The column data.
+ * @param {string} [props.className] - Additional class names for styling.
+ *
+ * @returns {JSX.Element} The rendered ColumnCard component.
+ *
+ * @component
+ *
+ * @example
+ * <ColumnCard column={columnData} className="custom-class" />
+ *
+ * @remarks
+ * This component uses the `useTasks`, `useSetAtom`, and `useColumns` hooks to manage tasks and columns.
+ * It also utilizes the `useSortable` hook from the DnD library for drag-and-drop functionality.
+ *
+ * @internal
+ * The `handleDropdownChange` function handles the dropdown menu actions for editing or deleting the column.
+ * The `handleAddNewTask` function adds a new task to the column and scrolls to the bottom of the task list.
+ *
+ * @see {@link TaskCard} for the task card component used within the column.
+ * @see {@link AddTaskForm} for the form component used to add new tasks.
+ */
+
 type Props = { column: Column; className?: string };
 
 const dropdownOptions = [
@@ -99,10 +126,10 @@ export const ColumnCard = ({ column, className }: Props) => {
       {...attributes}
     >
       {/* Column Header */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 p-2 ">
         <div
           style={{ background: `${color}20` }}
-          className="p-1 rounded flex flex-1 items-center gap-1"
+          className="p-2 rounded cursor-grab flex flex-1 items-center gap-1"
         >
           <BodyText className="!font-medium !text-sm">{label}</BodyText>
           <div

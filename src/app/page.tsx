@@ -107,11 +107,11 @@ export default function KanbanBoard() {
         return;
       }
 
-      // Throttle updates to 50ms
+      // Throttle updates to 20ms
       if (!throttleTimeout.current) {
         throttleTimeout.current = setTimeout(() => {
           throttleTimeout.current = null;
-        }, 50);
+        }, 20);
 
         lastPosition.current = { activeId, overId };
 
@@ -142,8 +142,6 @@ export default function KanbanBoard() {
   const handleDragEnd = useCallback(
     (event: DragEndEvent) => {
       const { active, over } = event;
-      setActiveColumn(null);
-      setActiveTask(null);
 
       if (!over) return;
 
@@ -156,6 +154,9 @@ export default function KanbanBoard() {
           moveColumn(active.id.toString(), over.id.toString());
         }
       }
+
+      setActiveColumn(null);
+      setActiveTask(null);
     },
     [columns, moveColumn]
   );

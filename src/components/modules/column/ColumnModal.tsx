@@ -14,6 +14,26 @@ import { useAtom } from "jotai";
 import { columnModalAtom } from "src/lib/store";
 import { ColumnForm } from "./ColumnForm";
 
+/**
+ * ColumnModal component renders a modal for creating or editing a column.
+ * It uses the `useAtom` hook to manage the modal state and the `useColumns` hook
+ * to handle adding and updating columns.
+ *
+ * @returns {JSX.Element} The rendered ColumnModal component.
+ *
+ * @component
+ * @example
+ * // Usage example:
+ * <ColumnModal />
+ *
+ * @remarks
+ * The modal form is managed using `react-hook-form` with validation provided by `yup`.
+ * The form fields are pre-filled with the column data if available.
+ *
+ * @function
+ * @name ColumnModal
+ */
+
 const schema = Yup.object({
   label: Yup.string().required("Label is required"),
   color: Yup.string().required("Color is required"),

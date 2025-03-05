@@ -8,6 +8,17 @@ import { TaskCard } from "src/components/modules/task/TaskCard";
 import { Column } from "src/types/column";
 import { Task } from "src/types/task";
 
+/**
+ * DndPortal component renders a drag-and-drop overlay using React portals.
+ * It mounts the overlay to the document body when the component is mounted.
+ *
+ * @param {DndPortalProps} props - The props for the DndPortal component.
+ * @param {Column} props.activeColumn - The active column being dragged.
+ * @param {Task} props.activeTask - The active task being dragged.
+ *
+ * @returns {React.ReactPortal | null} - Returns a React portal with the drag overlay or null if not mounted.
+ */
+
 type DndPortalProps = {
   activeColumn: Column | null;
   activeTask: Task | null;

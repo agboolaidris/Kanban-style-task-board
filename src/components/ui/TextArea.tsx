@@ -7,6 +7,21 @@ import React, {
 import { cva, cx, VariantProps } from "class-variance-authority";
 import { TriangleAlert } from "lucide-react";
 
+/**
+ * A forward-ref TextArea component that renders a label, a textarea, and an optional error message.
+ *
+ * @param {Object} props - The properties object.
+ * @param {string} [props.label] - The label text for the textarea.
+ * @param {string} [props.error] - The error message to display.
+ * @param {string} [props.intent] - The intent of the textarea (e.g., primary, secondary).
+ * @param {string} [props.size] - The size of the textarea (e.g., small, medium, large).
+ * @param {string} [props.className] - Additional class names to apply to the textarea.
+ * @param {React.Ref<HTMLTextAreaElement>} ref - The ref to be forwarded to the textarea element.
+ * @param {Object} rest - Additional properties to be spread onto the textarea element.
+ *
+ * @returns {JSX.Element} The rendered TextArea component.
+ */
+
 const textareaStyles = cva(
   "w-full appearance-none resize-none text-brand-textBlack rounded-md border font-normal leading-loose focus:border px-3 sm:text-sm  focus:outline-none",
   {

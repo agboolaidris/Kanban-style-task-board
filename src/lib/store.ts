@@ -1,9 +1,9 @@
 import { atom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
-import { Column } from "src/types/column";
-import { Task } from "src/types/task";
-import defaultTasks from "src/data/tasks.json";
-import defaultColumns from "src/data/columns.json";
+import { Column } from "../types/column";
+import { Task } from "../types/task";
+import defaultTasks from "../data/tasks.json";
+import defaultColumns from "../data/columns.json";
 
 export const columnsAtom = atomWithStorage<Column[]>(
   "columnsAtom",

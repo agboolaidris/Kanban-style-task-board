@@ -1,5 +1,14 @@
+"use client";
 import { CircleIcon, CircleCheckBig } from "lucide-react";
 import React from "react";
+
+/**
+ * Props for the ColorPicker component.
+ *
+ * @property {string} label - The label for the color picker.
+ * @property {string} color - The current color value.
+ * @property {(value: string) => void} setColor - Function to update the color value.
+ */
 
 const colors = [
   "#007BFF", // Blue (Primary, professional)

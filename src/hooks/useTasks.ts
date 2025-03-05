@@ -1,8 +1,31 @@
 import { useAtom } from "jotai";
 import { useCallback } from "react";
+import { generateUniqueId } from "src/lib/generateId";
 
 import { tasksAtom } from "src/lib/store";
 import { CreateTaskBody } from "src/types/task";
+
+/**
+ * Custom hook to manage tasks.
+ *
+ * @returns {Object} An object containing the tasks and functions to manipulate them.
+ * @returns {Array} tasks - The current list of tasks.
+ * @returns {Function} addTask - Function to add a new task.
+ * @param {CreateTaskBody} payload - The data for the new task.
+ * @returns {void}
+ * @returns {Function} removeTask - Function to remove a task by its ID.
+ * @param {string} id - The ID of the task to remove.
+ * @returns {void}
+ * @returns {Function} updateTask - Function to update a task by its ID.
+ * @param {string} id - The ID of the task to update.
+ * @param {Partial<CreateTaskBody>} payload - The data to update the task with.
+ * @returns {void}
+ * @returns {Function} moveTask - Function to move a task to a specific index.
+ * @param {string} taskId - The ID of the task to move.
+ * @param {string} targetTaskId - The ID of the target task to move the task before.
+ * @param {Partial<CreateTaskBody>} [payload] - Optional data to update the task with during the move.
+ * @returns {void}
+ */
 
 export const useTasks = () => {
   const [tasks, setTasks] = useAtom(tasksAtom);
@@ -12,7 +35,7 @@ export const useTasks = () => {
       setTasks((prev) => [
         ...prev,
         {
-          id: crypto.randomUUID(),
+          id: generateUniqueId(),
           ...payload,
           created_at: Date.now().toString(),
         },

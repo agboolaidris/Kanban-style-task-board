@@ -1,7 +1,25 @@
 import { useAtom } from "jotai";
 import { useCallback } from "react";
+import { generateUniqueId } from "src/lib/generateId";
 import { columnsAtom } from "src/lib/store";
 import { CreateColumnBody } from "src/types/column";
+
+/**
+ * Custom hook to manage columns state.
+ *
+ * @returns {Object} An object containing the columns state and functions to manipulate it.
+ * @returns {Array} columns - The current state of columns.
+ * @returns {Function} addColumn - Function to add a new column.
+ * @param {CreateColumnBody} payload - The data for the new column.
+ * @returns {Function} removeColumn - Function to remove a column by its ID.
+ * @param {string} id - The ID of the column to remove.
+ * @returns {Function} updateColumn - Function to update a column's label.
+ * @param {string} id - The ID of the column to update.
+ * @param {Partial<CreateColumnBody>} payload - The new data for the column.
+ * @returns {Function} moveColumn - Function to move a column to a specific index.
+ * @param {string} columnId - The ID of the column to move.
+ * @param {string} targetColumnId - The ID of the column to move to.
+ */
 
 export const useColumns = () => {
   const [columns, setColumns] = useAtom(columnsAtom);
@@ -9,10 +27,11 @@ export const useColumns = () => {
   // Add a new column
   const addColumn = useCallback(
     (payload: CreateColumnBody) => {
-      setColumns((prev) => [...prev, { id: crypto.randomUUID(), ...payload }]);
+      setColumns((prev) => [...prev, { id: generateUniqueId(), ...payload }]);
     },
     [setColumns]
   );
+
   // Remove a column
   const removeColumn = useCallback(
     (id: string) => {
@@ -32,6 +51,7 @@ export const useColumns = () => {
     },
     [setColumns]
   );
+
   // Move column to specific index
   const moveColumn = useCallback(
     (columnId: string, targetColumnId: string) => {

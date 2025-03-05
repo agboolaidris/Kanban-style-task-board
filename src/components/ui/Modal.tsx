@@ -10,6 +10,17 @@ type Props = {
   children: ReactNode;
 };
 
+/**
+ * Modal component that renders a dialog with a backdrop.
+ *
+ * @param {boolean} isOpen - Determines if the modal is open or closed.
+ * @param {() => void} onClose - Function to call when the modal is requested to be closed.
+ * @param {string} [className] - Additional classes to apply to the modal.
+ * @param {React.ReactNode} children - Content to be displayed inside the modal.
+ *
+ * @returns {JSX.Element} The rendered modal component.
+ */
+
 export const Modal = ({ isOpen, onClose, className, children }: Props) => {
   return (
     <Dialog
@@ -17,6 +28,7 @@ export const Modal = ({ isOpen, onClose, className, children }: Props) => {
       as="div"
       className="relative z-[1000] focus:outline-none "
       onClose={onClose}
+      role="dialog"
       __demoMode
     >
       <div className="fixed inset-0 z-10 w-screen overflow-y-auto bg-[#00000080]  transition-opacity">

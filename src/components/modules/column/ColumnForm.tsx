@@ -8,6 +8,17 @@ import { Controller, UseFormReturn } from "react-hook-form";
 import { CreateColumnBody } from "src/types/column";
 import { Button } from "@ui/Button";
 
+/**
+ * ColumnForm component renders a form for creating or editing a column.
+ *
+ * @param {Object} props - The properties object.
+ * @param {Object} props.methods - The methods provided by react-hook-form.
+ * @param {Function} props.onSubmit - The function to call when the form is submitted.
+ * @param {Function} props.onCancel - The function to call when the cancel button is clicked.
+ *
+ * @returns {JSX.Element} The rendered ColumnForm component.
+ */
+
 type ColumnFormProps = {
   methods: UseFormReturn<CreateColumnBody>;
   onSubmit: () => void;

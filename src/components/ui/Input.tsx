@@ -8,6 +8,23 @@ import React, {
 import { cva, cx, VariantProps } from "class-variance-authority";
 import { TriangleAlert } from "lucide-react";
 
+/**
+ * A custom input component with support for labels, icons, loading state, and error messages.
+ *
+ * @component
+ * @param {Object} props - The properties object.
+ * @param {string} [props.label] - The label text for the input.
+ * @param {string} [props.error] - The error message to display.
+ * @param {string} [props.intent] - The intent of the input (e.g., primary, secondary).
+ * @param {string} [props.size] - The size of the input (e.g., small, medium, large).
+ * @param {React.ReactNode} [props.rightIcon] - The icon to display on the right side of the input.
+ * @param {string} [props.className] - Additional class names to apply to the input.
+ * @param {React.ReactNode} [props.leftIcon] - The icon to display on the left side of the input.
+ * @param {React.Ref<HTMLInputElement>} ref - The ref to be forwarded to the input element.
+ * @param {Object} rest - Additional props to be spread onto the input element.
+ * @returns {JSX.Element} The rendered input component.
+ */
+
 const inputStyles = cva(
   "w-full !appearance-none text-brand-textBlack  rounded-md border font-normal leading-loose focus:border px-3 sm:text-sm  focus:outline-none",
   {
@@ -48,18 +65,7 @@ export type InputProps = Omit<VariantProps<typeof inputStyles>, "error"> & {
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
   (
-    {
-      label,
-      error,
-      intent,
-      size,
-      rightIcon,
-
-      className,
-      leftIcon,
-      isLoading,
-      ...rest
-    },
+    { label, error, intent, size, rightIcon, className, leftIcon, ...rest },
     ref
   ) => {
     return (
@@ -90,12 +96,6 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           {rightIcon && (
             <div className="absolute inset-y-0 right-0 z-20 flex items-center  justify-center text-gray-900">
               {rightIcon}
-            </div>
-          )}
-
-          {isLoading && (
-            <div className="absolute inset-y-0 right-0 z-20 mr-3 flex items-center  justify-center text-gray-900">
-              <div className="h-4 w-4 animate-spin rounded-full border-2 border-t-brand-blue" />
             </div>
           )}
         </div>
