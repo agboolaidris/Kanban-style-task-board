@@ -78,7 +78,7 @@ export const TaskCard = ({ task, onEdit, onDelete }: TaskCardProps) => {
             <BodyText className="!text-xs !text-gray-600">
               {dateFormat(task.created_at, "hh:mmA | DD MMM YYYY")}
             </BodyText>
-            <div className="hidden group-hover:flex ">
+            <div className=" lg:hidden group-hover:flex ">
               <Button
                 variant="secondary"
                 className="size-7"
