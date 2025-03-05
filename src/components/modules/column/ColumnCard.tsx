@@ -105,7 +105,7 @@ export const ColumnCard = ({ column, className }: Props) => {
         ref={setNodeRef}
         style={style}
         className={cx(
-          "h-full border border-gray-200 rounded-md p-1 relative overflow-hidden",
+          "border border-gray-200 bg-gray-100 rounded-md p-1 relative overflow-hidden",
           className
         )}
         {...listeners}
@@ -119,14 +119,16 @@ export const ColumnCard = ({ column, className }: Props) => {
       ref={setNodeRef}
       style={style}
       className={cx(
-        "h-full border border-gray-200 rounded-md bg-gray-100 p-1 relative overflow-hidden flex flex-col",
+        "border border-gray-200 bg-gray-100 rounded-md p-1 relative overflow-hidden flex flex-col",
         className
       )}
-      {...listeners}
-      {...attributes}
     >
       {/* Column Header */}
-      <div className="flex items-center gap-2 p-2 ">
+      <div
+        className="flex items-center gap-2 p-2 "
+        {...listeners}
+        {...attributes}
+      >
         <div
           style={{ background: `${color}20` }}
           className="p-2 rounded cursor-grab flex flex-1 items-center gap-1"
@@ -143,7 +145,7 @@ export const ColumnCard = ({ column, className }: Props) => {
       </div>
 
       {/* Task List */}
-      <div className="pt-5 space-y-4 p-2 h-full overflow-auto pb-32 flex-1">
+      <div className="pt-5 space-y-4 p-2  h-max max-h-full  overflow-auto">
         <SortableContext items={columnTaskIds}>
           {columnTasks.map((task) => (
             <TaskCard
@@ -156,6 +158,12 @@ export const ColumnCard = ({ column, className }: Props) => {
         </SortableContext>
         <div ref={bottomRef} />
       </div>
+
+      <div
+        className="flex-1 cursor-grabbing "
+        {...listeners}
+        {...attributes}
+      ></div>
 
       {/* Add Task Form */}
       <div className="w-full p-2">

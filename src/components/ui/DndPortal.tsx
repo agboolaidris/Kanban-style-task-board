@@ -36,7 +36,7 @@ export const DndPortal = ({ activeColumn, activeTask }: DndPortalProps) => {
 
   return createPortal(
     <DragOverlay>
-      {activeColumn && <ColumnCard column={activeColumn} />}
+      {activeColumn && <ColumnCard className="!h-full" column={activeColumn} />}
       {activeTask && (
         <TaskCard onDelete={() => null} onEdit={() => null} task={activeTask} />
       )}

@@ -20,7 +20,6 @@ import {
 } from "@dnd-kit/sortable";
 
 // Components
-import { Navbar } from "@ui/Navbar";
 import { Button } from "@ui/Button";
 import { ColumnCard } from "src/components/modules/column/ColumnCard";
 import { DndPortal } from "@ui/DndPortal";
@@ -162,9 +161,7 @@ export default function KanbanBoard() {
   );
 
   return (
-    <div className="h-screen flex flex-col">
-      <Navbar />
-
+    <div className="h-full">
       <DndWrapper>
         <DndContext
           onDragEnd={handleDragEnd}
@@ -173,7 +170,7 @@ export default function KanbanBoard() {
           onDragOver={handleDragOver}
         >
           {/* Columns Container */}
-          <div className="flex gap-2 overflow-x-scroll h-full py-2 wrapper pb-3">
+          <div className="flex gap-2 overflow-x-scroll py-2 wrapper pb-3 h-full">
             <SortableContext
               items={columnsId}
               strategy={verticalListSortingStrategy}
@@ -182,7 +179,7 @@ export default function KanbanBoard() {
                 <ColumnCard
                   key={column.id}
                   column={column}
-                  className="w-72 shrink-0 h-full"
+                  className="w-72 shrink-0 !max-h-full"
                 />
               ))}
             </SortableContext>
@@ -203,7 +200,6 @@ export default function KanbanBoard() {
         </DndContext>
       </DndWrapper>
 
-      {/* Column Management Modal */}
       <ColumnModal />
     </div>
   );
